@@ -21,7 +21,7 @@ saveButton.addEventListener("click", function() {
     const textToSave = inputTextField.value;
     console.log("I am going to save " + textToSave + " to Firestore");
     docRef.set({
-        hotDogStatus: textToSave
+        nickName: textToSave
     }).then(function(){
         console.log("Status saved!");
     }).catch(function(){
@@ -34,7 +34,7 @@ loadButton.addEventListener("click", function() {
     docRef.get().then(function(doc) {
         if(doc && doc.exists){
             const myData = doc.data();
-            outputHeader.innerHTML = "Hot dog status: " + myData.hotDogStatus;
+            outputHeader.innerHTML = "Nickname: " + myData.nickName;
         }
     }).catch(function (error){
         console.log("Got an error: ", error);
@@ -48,7 +48,7 @@ getRealtimeUpdates = function(){
         if(doc && doc.exists){
             const myData = doc.data();
             console.log("Check out this document I recieved", doc);
-            outputHeader.innerHTML = "Hot dog status: " + myData.hotDogStatus;
+            outputHeader.innerHTML = "Nickname : " + myData.nickName;
         }
     });
 }
