@@ -1,0 +1,45 @@
+//Initializing Firebase
+  var config = {
+    apiKey: "AIzaSyBYFOuocBhI3ZMa34HTQQ3OG5iDfItdSS4",
+    authDomain: "mywebapp-7bc86.firebaseapp.com",
+    databaseURL: "https://mywebapp-7bc86.firebaseio.com",
+    projectId: "mywebapp-7bc86",
+    storageBucket: "mywebapp-7bc86.appspot.com",
+    messagingSenderId: "858961654254"
+  };
+  firebase.initializeApp(config);
+
+var firestore = firebase.firestore();
+
+
+//Number of Questions
+
+const docRef1 = firestore.collection("Rooms").doc("Room");
+
+const roomNumberShown = document.querySelector("#roomNumberShown");
+const roomID = document.querySelector("#roomID");
+const joinRoom = document.querySelector("#joinRoom");
+
+joinRoom.addEventListener("click", function(){
+    const textToSave = roomID.value;
+    console.log("I am going to save " + textToSave + " to Firestore");
+    docRef1.set({
+        roomNumber: textToSave
+    }).then(function(){
+        console.log("Status saved!");
+    }).catch(function(){
+        console.log("Got an error: ", error);
+    })
+})
+
+getRealtimeUpdates = function(){
+    docRef1.onSnapshot(function (doc){
+        if(doc && doc.exists){
+            const myData = doc.data();
+            console.log("Check out this document I recieved", doc);
+            roomNumberShown.innerHTML = "Room #: " + myData.roomNumber;
+        }
+    });
+}
+
+getRealtimeUpdates();
