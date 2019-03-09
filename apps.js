@@ -8,14 +8,18 @@
     messagingSenderId: "858961654254"
   };
   firebase.initializeApp(config);
+
 var firestore = firebase.firestore();
 
 
-const docRef = firestore.doc("samples/sandwichData");
-const outputHeader = document.querySelector("#hotDogOutput");
-const inputTextField = document.querySelector("#latestHotDogStatus");
+
+
+const docRef = firestore.doc("players/player");
+const outputHeader = document.querySelector("#nicknameOutput");
+const inputTextField = document.querySelector("#latestNickname");
 const saveButton = document.querySelector("#saveButton");
 const loadButton = document.querySelector("#loadButton");
+
 
 saveButton.addEventListener("click", function() {
     const textToSave = inputTextField.value;
@@ -34,7 +38,8 @@ loadButton.addEventListener("click", function() {
     docRef.get().then(function(doc) {
         if(doc && doc.exists){
             const myData = doc.data();
-            outputHeader.innerHTML = "Nickname: " + myData.nickName;
+            outputHeader.innerHTML = "Player = " + myData.nickName;
+            console.log("I am going to load " + myData.nickName + " to Firestore");
         }
     }).catch(function (error){
         console.log("Got an error: ", error);
@@ -48,12 +53,9 @@ getRealtimeUpdates = function(){
         if(doc && doc.exists){
             const myData = doc.data();
             console.log("Check out this document I recieved", doc);
-            outputHeader.innerHTML = "Nickname : " + myData.nickName;
+            outputHeader.innerHTML = "Player = " + myData.nickName;
         }
     });
 }
 
 getRealtimeUpdates();
-
-
-//
