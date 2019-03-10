@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Myaamia</title>
+        <title>Rococo</title>
+
         <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
     </head>
+
     <body>
 
         <h1 id = "roomNumberShown">Room #: </h1>
@@ -11,22 +18,25 @@
         <button id = "joinRoom">Join Room! </button>
 
 
-        <h2 id = "nicknameOutput">Name </h2>
+        <h1 id = "nicknameOutput">Name: </h1>
         <input type="textfield" placeholder="enter nickname here " id = "latestNickname"/>
         <button id = "saveButton">Add Player</button>
 
 
-        <h3 id = "questionOutput">Question: Generate here?</h3>
+        <h5 id = "questionOutput">Question: Generate here</h5>
         <input type= "textfield" placeholder= "enter answer here" id = "questionAnswer" />
         <button id = "submitAnswer">Submit</button>
 
 
 
         <script src= "./joinroom.js"></script>
-
         <script src= "./addplayer.js"></script>
-
         <script src= "./answerquestion.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 
     </body>
 </html>
