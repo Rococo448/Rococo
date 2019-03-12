@@ -1,0 +1,3 @@
+const docRefQ = firestore.collection("questions").doc("2");
+
+const questionOutput = docRefQ.get(Question);

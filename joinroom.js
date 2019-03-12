@@ -27,6 +27,7 @@ joinRoom.addEventListener("click", function(){
         roomNumber: textToSave
     }).then(function(){
         console.log("Status saved!");
+        window.location.href = "roomjoined.html";
     }).catch(function(){
         console.log("Got an error: ", error);
     })

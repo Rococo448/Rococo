@@ -1,17 +1,27 @@
+ var config = {
+    apiKey: "AIzaSyBYFOuocBhI3ZMa34HTQQ3OG5iDfItdSS4",
+    authDomain: "mywebapp-7bc86.firebaseapp.com",
+    databaseURL: "https://mywebapp-7bc86.firebaseio.com",
+    projectId: "mywebapp-7bc86",
+    storageBucket: "mywebapp-7bc86.appspot.com",
+    messagingSenderId: "858961654254"
+  };
+  firebase.initializeApp(config);
 
+var firestore = firebase.firestore();
 
-//Number of Questions
+//Question stuff
 
-const docRef2 = firestore.collection("questions").doc("question");
+const docRefQ = firestore.collection("questions").doc("question");
 
-const questionOutput = document.querySelector("#questionOutput");
+const questionOutput = document.querySelector("questionOutput");
 const questionAnswer = document.querySelector("#questionAnswer");
 const submitAnswer = document.querySelector("#submitAnswer");
 
 submitAnswer.addEventListener("click", function(){
     const textToSave = questionAnswer.value;
     console.log("I am going to save " + textToSave + " to Firestore");
-    docRef2.set({
+    docRefQ.set({
         answer: textToSave
     }).then( function(){
         console.log("Status saved!");
@@ -20,12 +30,8 @@ submitAnswer.addEventListener("click", function(){
     })
 })
 
-
-
-
-
 getRealtimeUpdates = function(){
-    docRef2.onSnapshot(function (doc){
+    docRefQ.onSnapshot(function (doc){
         if(doc && doc.exists){
             const myData = doc.data();
         }
