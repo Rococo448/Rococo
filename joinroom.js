@@ -20,6 +20,7 @@ const roomNumberShown = document.querySelector("#roomNumberShown");
 const roomID = document.querySelector("#roomID");
 const joinRoom = document.querySelector("#joinRoom");
 
+
 joinRoom.addEventListener("click", function(){
     const textToSave = roomID.value;
     console.log("I am going to save " + textToSave + " to Firestore");

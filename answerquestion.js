@@ -80,6 +80,14 @@ docRefQ.get().then(function(doc){
 });
 
 
+if(getQuestion){
+    getQuestion.addEventListener("click", function(){
+        window.location.href = "newquestion.html";
+        console.log("I went to a new page");
+    });
+}
+
+
 
 //DISPLAYING OPTIONS AND LINKING TO CORRECT OR INCORRECT WEB PAGE
 
@@ -116,6 +124,7 @@ submitAnswer.addEventListener("click", function(){
         console.log("Got an error: ", error);
     })
 })
+
 
 //getQuestion.addEventListener("click", function(){
 //   questionOutput.innerHTML = firestore.collection("questions").doc("question").get("question").toString;
