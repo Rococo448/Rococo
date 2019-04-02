@@ -1,7 +1,12 @@
 
 
 //Setting a document Reference
-const docRef = firestore.collection("players").doc();
+
+
+////Creating a randomly numbered document for a player
+//const rN = Math.floor(Math.random()* Math.floor(10));
+
+const docRef = firestore.collection("players").doc("2");
 
 //creating variables by gathering info from html
 const outputHeader = document.querySelector("#nicknameOutput");
