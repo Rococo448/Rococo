@@ -85,12 +85,14 @@ docRefNO.get().then(function(doc){
 
 if(selectName1){
     selectName1.addEventListener("click", function(){
-        gameInfo.innerText = "No it isn't!";
+        gameInfo.innerText = "No it isn't";
+        window.location.href = "mingjunquestion.html";
     });
 }
 if(selectName2){
     selectName2.addEventListener("click", function(){
         gameInfo.innerText = "Yep!";
+        window.location.href = "leiquestion.html";
     });
 }
 if(selectName3){
