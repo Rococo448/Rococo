@@ -13,6 +13,8 @@ var config = {
 var firestore = firebase.firestore();
 
 //MESSING AROUND
+
+//Setting the room #
 var docRefR = firestore.collection("Rooms").doc("Room");
 
 
@@ -29,7 +31,7 @@ docRefR.get().then(function(doc){
     console.log("error", error);
 });
 
-
+// Setting the player name
 var docRefP = firestore.collection("players").doc("2");
 
 docRefP.get().then(function(doc){
@@ -45,14 +47,14 @@ docRefP.get().then(function(doc){
     console.log("error", error);
 });
 
-
-const docRefG = firestore.collection("Games").doc("hobbyhunt");
+//Getting the question and setting it up
+const docRefG = firestore.collection("questions").doc("hobbyQuestion");
 
 docRefG.get().then(function(doc){
     if(doc.exists){
-        const playerData = doc.data();
-        console.log("the doc data = ", playerData.hobby + playerData.name);
-        gameInfo.innerText = playerData.hobby + " is " + playerData.name + "'s favorite hobby";
+        const hobbyQuestion = doc.data();
+        console.log("the doc data = ", hobbyQuestion.hobby);
+        gameInfo.innerText = hobbyQuestion.hobby + " is _______________'s favorite hobby";
 
     }else{
         console.log("no such");
@@ -61,18 +63,45 @@ docRefG.get().then(function(doc){
     console.log("error", error);
 });
 
+//making buttons names
+const docRefNO = firestore.collection("players").doc("2");
 
-if(selectTrue){
-    selectTrue.addEventListener("click", function(){
-        gameInfo.innerText = "You're Right!";
+//Putting player 1 there
+
+docRefNO.get().then(function(doc){
+    if(doc.exists){
+        const playerName = doc.data();
+        console.log("the doc data = ", playerName.nickName);
+        selectName1.innerText = playerName.nickName;
+
+    }else{
+        console.log("no such");
+    }
+}).catch(function(error){
+    console.log("error", error);
+});
+
+//Saying Right or Wrong (adding point)
+
+if(selectName1){
+    selectName1.addEventListener("click", function(){
+        gameInfo.innerText = "No it isn't!";
     });
 }
-
-if(selectFalse){
-    selectFalse.addEventListener("click", function(){
-        gameInfo.innerText = "No!";
+if(selectName2){
+    selectName2.addEventListener("click", function(){
+        gameInfo.innerText = "Yep!";
     });
 }
-
+if(selectName3){
+    selectName3.addEventListener("click", function(){
+        gameInfo.innerText = "No it isn't!";
+    });
+}
+if(selectName4){
+    selectName4.addEventListener("click", function(){
+        gameInfo.innerText = "No it isn't!";
+    });
+}
 
 
