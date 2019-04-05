@@ -1,4 +1,4 @@
-//GameplayStuff
+//ALL JUST TO SETUP THE BASICS, FIRESTORE, ROOM NUMBER, PLAYER NAME
 
 var config = {
     apiKey: "AIzaSyBYFOuocBhI3ZMa34HTQQ3OG5iDfItdSS4",
@@ -47,15 +47,15 @@ docRefP.get().then(function(doc){
     console.log("error", error);
 });
 
-//Getting the question and setting it up
-const docRefG = firestore.collection("questions").doc("hobbyQuestion");
+//DONE SETTING UP THE BASICS
 
-docRefG.get().then(function(doc){
+docRefQ1 = firestore.collection("questions").doc("1");
+
+docRefQ1.get().then(function(doc){
     if(doc.exists){
-        const hobbyQuestion = doc.data();
-        console.log("the doc data = ", hobbyQuestion.hobby);
-        gameInfo.innerText = hobbyQuestion.hobby + " is _______________'s favorite hobby";
-
+        const questionName = doc.data();
+        console.log("the doc data = ", questionName.question);
+        questionGenerator.innerText = questionName.question;
     }else{
         console.log("no such");
     }
@@ -63,46 +63,63 @@ docRefG.get().then(function(doc){
     console.log("error", error);
 });
 
-//MAKING BUTTON NAMES
-const docRefNO = firestore.collection("players").doc("1");
-
-//Putting player 1 there
-
-docRefNO.get().then(function(doc){
-    if(doc.exists){
-        const playerName = doc.data();
-        console.log("the doc data = ", playerName.nickName);
-        selectName1.innerText = playerName.nickName;
-
-    }else{
-        console.log("no such");
-    }
-}).catch(function(error){
-    console.log("error", error);
-});
-
-//Saying Right or Wrong (adding point)
-
-if(selectName1){
-    selectName1.addEventListener("click", function(){
-        answerFeedback.innerText = "No it isn't";
+if(correctResponse){
+    correctResponse.addEventListener("click", function(){
+        window.location.href = "question2.html";
     });
 }
-if(selectName2){
-    selectName2.addEventListener("click", function(){
-        answerFeedback.innerText = "Yep!";
-        window.location.href = "question1.html";
+
+const inputTextField = document.querySelector("#guess");
+
+
+if(submitGuess){
+    submitGuess.addEventListener("click", function(){
+        const guessToSave = inputTextField.value;
+        randomResponse5.innerHTML = guessToSave;
+        if(guessToSave == "1"){
+            window.location.href = "question2.html";
+        }else{
+            console.log("not checking submitted guess");
+            feedback.innerHTML = "nope";
+        }
     });
 }
-if(selectName3){
-    selectName3.addEventListener("click", function(){
-        answerFeedback.innerText = "No it isn't!";
-    });
-}
-if(selectName4){
-    selectName4.addEventListener("click", function(){
-        answerFeedback.innerText = "No it isn't!";
-    });
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

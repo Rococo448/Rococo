@@ -14,7 +14,7 @@ var firestore = firebase.firestore();
 
 //Number of Questions
 
-const docRef1 = firestore.collection("Rooms").doc("Room");
+const docRef1 = firestore.collection("Rooms").doc("1");
 
 const roomNumberShown = document.querySelector("#roomNumberShown");
 const roomID = document.querySelector("#roomID");

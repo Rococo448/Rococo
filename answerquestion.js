@@ -11,7 +11,7 @@
 var firestore = firebase.firestore();
 
 //MESSING AROUND
-var docRefR = firestore.collection("Rooms").doc("Room");
+var docRefR = firestore.collection("Rooms").doc("1");
 
 
 docRefR.get().then(function(doc){
@@ -28,7 +28,7 @@ docRefR.get().then(function(doc){
 });
 
 
-var docRefP = firestore.collection("players").doc("2");
+var docRefP = firestore.collection("players").doc("1");
 
 docRefP.get().then(function(doc){
     if(doc.exists){
@@ -65,11 +65,13 @@ docRefP.get().then(function(doc){
 
 
 const docRefQ = firestore.collection("questions").doc("2");
+var questionCorrectAnswer = "";
 
 docRefQ.get().then(function(doc){
     if(doc.exists){
         const questionStuff = doc.data();
         console.log("the doc data = ", questionStuff.Question);
+        questionCorrectAnswer = questionStuff.answer;
         questionOutput.innerText = "Question = " + questionStuff.Question;
 
     }else{
@@ -80,12 +82,15 @@ docRefQ.get().then(function(doc){
 });
 
 
-if(getQuestion){
-    getQuestion.addEventListener("click", function(){
-        window.location.href = "newquestion.html";
-        console.log("I went to a new page");
-    });
-}
+
+
+
+//if(getQuestion){
+//    getQuestion.addEventListener("click", function(){
+//        window.location.href = "newquestion.html";
+//        console.log("I went to a new page");
+//    });
+//}
 
 
 
@@ -108,13 +113,18 @@ if(getQuestion){
 
 
 //Collecting Answer
-const docRefA = firestore.collection("questions").doc("question");
+const docRefA = firestore.collection("responses").doc("1");
 
 const questionAnswer = document.querySelector("#questionAnswer");
 const submitAnswer = document.querySelector("#submitAnswer");
 
 submitAnswer.addEventListener("click", function(){
     const textToSave = questionAnswer.value;
+
+    if(textToSave == questionCorrectAnswer){
+        console.log("correct answer");
+        window.location.href = "newquestion.html";
+    }
     console.log("I am going to save " + textToSave + " to Firestore");
     docRefA.set({
         answer: textToSave

@@ -6,7 +6,7 @@
 ////Creating a randomly numbered document for a player
 //const rN = Math.floor(Math.random()* Math.floor(10));
 
-const docRef = firestore.collection("players").doc("2");
+const docRef = firestore.collection("players").doc("1");
 
 //creating variables by gathering info from html
 const outputHeader = document.querySelector("#nicknameOutput");
@@ -30,7 +30,7 @@ getRealtimeUpdates = function(){
         if(doc && doc.exists){
             const myData = doc.data();
             console.log("Check out this document I recieved", doc);
-            outputHeader.innerHTML = "Player = " + myData.nickName;
+            outputHeader.innerHTML = "Player =" + myData.nickName;
         }
     });
 }
