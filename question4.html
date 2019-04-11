@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rococo</title>
+
+        <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+
+    </head>
+
+    <body>
+        <h5 id = "roomID">Room #: </h5>
+        <h5 id = "latestNickname"> Nickname: </h5>
+
+        <h1 id = "questionGenerator"> Whats the answer</h1>
+
+        <button id = "correctResponse">Lei</button>
+        <button id = "randomResponse1">Mingjun</button>
+        <button id = "randomResponse2">Chase</button>
+        <button id = "randomResponse3">Harrison</button>
+
+        <script src= "./question2.js"></script>
+
+
+    </body>
+</html>

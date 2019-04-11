@@ -67,15 +67,40 @@ docRefQ1.get().then(function(doc){
     console.log("error", error);
 });
 
-//GETTING THE QUESTION OPTIONS
 
 
 
+//Adding The Responses to the Players Data
 
-//CHECKING THE RESPONSES
+const docRefTR = firestore.collection("responses").doc("3");
+
+const truth1Input = document.querySelector("#truth1");
+const truth2Input = document.querySelector("#truth2");
+
+const lieInput = document.querySelector("#lie");
 
 
+if(submitRs){
+    submitRs.addEventListener("click", function(){
+        const truth1ToSave = truth1Input.value;
+        const truth2ToSave = truth1Input.value;
+        const lieToSave = truth1Input.value;
+        console.log("I am going to save " + truth1ToSave + " and save " + truth2ToSave + " and save " +lieToSave);
+        docRefTR.set({
+            truth1: truth1ToSave,
+            truth2: truth2ToSave,
+            lie: lieToSave
+        }).then(function(){
+    console.log("status saved!");
+}).catch(function(error){
+    console.log("got an error",error);
+})
 
+        window.location.href = "question4.html";
+
+
+    });
+}
 
 
 
