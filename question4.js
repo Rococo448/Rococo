@@ -1,25 +1,119 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Rococo</title>
+//ALL JUST TO SETUP THE BASICS, FIRESTORE, ROOM NUMBER, PLAYER NAME
 
-        <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+var config = {
+    apiKey: "AIzaSyBYFOuocBhI3ZMa34HTQQ3OG5iDfItdSS4",
+    authDomain: "mywebapp-7bc86.firebaseapp.com",
+    databaseURL: "https://mywebapp-7bc86.firebaseio.com",
+    projectId: "mywebapp-7bc86",
+    storageBucket: "mywebapp-7bc86.appspot.com",
+    messagingSenderId: "858961654254"
+  };
+  firebase.initializeApp(config);
 
-    </head>
+var firestore = firebase.firestore();
 
-    <body>
-        <h5 id = "roomID">Room #: </h5>
-        <h5 id = "latestNickname"> Nickname: </h5>
+//MESSING AROUND
 
-        <h1 id = "questionGenerator"> Whats the answer</h1>
-
-        <button id = "correctResponse">Lei</button>
-        <button id = "randomResponse1">Mingjun</button>
-        <button id = "randomResponse2">Chase</button>
-        <button id = "randomResponse3">Harrison</button>
-
-        <script src= "./question2.js"></script>
+//Setting the room #
+var docRefR = firestore.collection("Rooms").doc("1");
 
 
-    </body>
-</html>
+docRefR.get().then(function(doc){
+    if(doc.exists){
+        const classRooms = doc.data();
+        console.log("the doc data = ", classRooms.roomNumber);
+        roomID.innerText = "Room # = " + classRooms.roomNumber;
+
+    }else{
+        console.log("no such");
+    }
+}).catch(function(error){
+    console.log("error", error);
+});
+
+// Setting the player name
+var docRefP = firestore.collection("players").doc("1");
+
+docRefP.get().then(function(doc){
+    if(doc.exists){
+        const playerList = doc.data();
+        console.log("the doc data = ", playerList.nickName);
+        latestNickname.innerText = "Player = " + playerList.nickName;
+
+    }else{
+        console.log("no such");
+    }
+}).catch(function(error){
+    console.log("error", error);
+});
+
+//DONE SETTING UP THE BASICS
+
+
+
+
+
+//GETTING THE QUESTION
+//docRefQ1 = firestore.collection("questions").doc("6");
+//
+//docRefQ1.get().then(function(doc){
+//    if(doc.exists){
+//        const questionName = doc.data();
+//        console.log("the doc data = ", questionName.question);
+//        questionGenerator.innerText = questionName.question;
+//    }else{
+//        console.log("no such");
+//    }
+//}).catch(function(error){
+//    console.log("error", error);
+//});
+
+//GETTING THE QUESTION OPTIONS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

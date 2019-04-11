@@ -125,6 +125,9 @@ submitAnswer.addEventListener("click", function(){
         console.log("correct answer");
         window.location.href = "newquestion.html";
     }
+    else{
+        getQuestion.innerText = "think with your ego";
+    }
     console.log("I am going to save " + textToSave + " to Firestore");
     docRefA.set({
         answer: textToSave

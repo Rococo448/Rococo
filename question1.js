@@ -76,7 +76,7 @@ if(submitGuess){
     submitGuess.addEventListener("click", function(){
         const guessToSave = inputTextField.value;
         randomResponse5.innerHTML = guessToSave;
-        if(guessToSave == "1"){
+        if(guessToSave == "4"){
             window.location.href = "question2.html";
         }else{
             console.log("not checking submitted guess");

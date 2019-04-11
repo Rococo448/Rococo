@@ -83,8 +83,8 @@ const lieInput = document.querySelector("#lie");
 if(submitRs){
     submitRs.addEventListener("click", function(){
         const truth1ToSave = truth1Input.value;
-        const truth2ToSave = truth1Input.value;
-        const lieToSave = truth1Input.value;
+        const truth2ToSave = truth2Input.value;
+        const lieToSave = lieInput.value;
         console.log("I am going to save " + truth1ToSave + " and save " + truth2ToSave + " and save " +lieToSave);
         docRefTR.set({
             truth1: truth1ToSave,
