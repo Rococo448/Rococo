@@ -73,7 +73,8 @@ joinRoom.addEventListener("click", function(){
     console.log("I am going to save " + roomToSave + " and " + playerToSave + " to Firestore");
     docRef1.doc(playerToSave).set({
         playerName: playerToSave,
-        roomNumber: roomToSave
+        roomNumber: roomToSave,
+        score: "0"
     }).then(function(){
         //SAVE THE COOKIE!!!
         //create a cookie
@@ -94,7 +95,9 @@ joinRoom.addEventListener("click", function(){
 
         joinRoomButton.style.display = "none";
 
-        changeQuestion("1");
+        //getResponseQuestion("1");
+        //getSpecialQuestion();
+        getMCQuestion();
 
 
     }).catch(function(error){
@@ -107,7 +110,7 @@ joinRoom.addEventListener("click", function(){
 //    Math.floor(Math.random() * 10);
 //}
 //CHANGE QUESTION
-function changeQuestion(n){
+function getResponseQuestion(n){
     var q = document.getElementById("questionOutput");
     q.style.display = "block";
     var r = document.getElementById("response");
@@ -121,6 +124,7 @@ function changeQuestion(n){
     document.cookie = "randomNumber" + "=" + randN + ";"
     console.log("after setting randomNumber to " + randN);
 
+
     if(n == 1){
         console.log("made it in");
         //const docRefQ = firestore.collection("questions").doc("1");
@@ -132,6 +136,8 @@ function changeQuestion(n){
             if(doc.exists){
                 const questionName = doc.data();
                 console.log("the doc data = ", questionName.question);
+                //Save question WITH COOKIE
+                document.cookie = "question" + "=" + questionName.question + ";"
                 questionOutput.innerText = questionName.question;
             }else{
                 console.log("no such");
@@ -169,11 +175,12 @@ submitResponse.addEventListener("click", function(){
     //Get Random Number WITH COOKIE
     var p = getCookie("playerName");
     var r = getCookie("randomNumber");
+    var q = getCookie("question");
 
     console.log("p = " + p + " r = " + r);
 
     const docRefQ = firestore.collection("questions").doc(r).collection("responses").doc(p);
-    console.log("I am going to save " + p + "'s response to Firestore in this question: " + questionToSave + "'s player responses");
+    console.log("I am going to save " + p + "'s response to Firestore in this question: " + q + "'s player responses");
 
     docRefQ.set({
         response: responseToSave
@@ -182,11 +189,168 @@ submitResponse.addEventListener("click", function(){
     });
 
 
-    changeQuestion("1");
+
+    getResponseQuestion("1");
+    //getSpecialQuestion();
+    //getMCQuestion();
 
 })
 
+function getSpecialQuestion(){
 
+    var q = document.getElementById("questionOutput");
+    //q.style.display = "block";
+    q.innerText = "Special Question";
+
+    var p = getCookie("playerName");
+    var r = getCookie("randomNumber");
+
+    firestore.collection("questions").doc("4").collection("responses").where("response", "==", "idk").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            const qRs = doc.data();
+            q.innerText = q.innerText + qRs.response;
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+
+}
+
+function getMCQuestion(n){
+    var q = document.getElementById("questionOutput");
+    q.style.display = "block";
+    var r = document.getElementById("response");
+    var sr = document.getElementById("submitResponse");
+    r.style.display = "none";
+    sr.style.display = "none";
+
+    //Activate question option buttons and score
+    var qO1 = document.getElementById("questionOption1");
+    qO1.style.display = "block";
+    var qO2 = document.getElementById("questionOption2");
+    qO2.style.display = "block";
+    var qO3 = document.getElementById("questionOption3");
+    qO3.style.display = "block";
+
+    //Add a scoreboard
+    var s = document.getElementById("score");
+    s.style.display = "block";
+    s.style.fontSize = "12px";
+
+    var p = getCookie("playerName");
+
+    //Getting current score
+        firestore.collection("TestRoom").doc(p).get().then(function(doc){
+            if(doc.exists){
+                const playerData = doc.data();
+                const playerScoreToGet = playerData.score;
+                //Save score in a cookie
+
+                document.cookie = "score" + "=" + playerScoreToGet + ";"
+
+                console.log("the players score = " +playerData.score);
+                score.innerText = "Score = " + playerScoreToGet;
+            }else{
+                console.log("no such");
+            }
+        }).catch(function(error){
+            console.log("error", error);
+        });
+
+
+    //Getting random Multiply choic question
+
+    var randN = Math.floor(Math.random() * 10);
+    const docRefQ = firestore.collection("questions").doc("mcg5");
+
+
+    docRefQ.get().then(function(doc){
+            if(doc.exists){
+                const questionName = doc.data();
+                console.log("the doc data = ", questionName.question);
+                //Save question WITH COOKIE
+                document.cookie = "question" + "=" + questionName.question + ";"
+                questionOutput.innerText = questionName.question;
+                questionOption1.innerText = questionName.option1;
+                questionOption2.innerText = questionName.option2;
+                questionOption3.innerText = questionName.option3;
+            }else{
+                console.log("no such");
+            }
+        }).catch(function(error){
+            console.log("error", error);
+        });
+
+    //Changing player score
+        var p = getCookie("playerName");
+
+        //CORRECT RESPONSE
+    questionOption1.addEventListener("click", function(){
+
+        console.log("whats going onongfangoahg");
+
+
+        //get score from cookie
+        var playerScore = getCookie("playerScore");
+
+        //Updating score
+        firestore.collection("TestRoom").doc(p).update({
+            score: "20"
+        }).then(function() {
+            score.innerText = "Score = 200";
+            console.log("score changed to: ");
+        }).catch(function(error) {
+            console.error("Error adding doc");
+        });
+
+    });
+
+    questionOption2.addEventListener("click", function(){
+
+        console.log("whats going onongfangoahg");
+
+
+        //get score from cookie
+        var playerScore = getCookie("playerScore");
+
+        //Updating score
+        firestore.collection("TestRoom").doc(p).update({
+            score: "10"
+        }).then(function() {
+            score.innerText = "Score = 00000";
+            console.log("score changed to: ");
+        }).catch(function(error) {
+            console.error("Error adding doc");
+        });
+
+    });
+
+    questionOption3.addEventListener("click", function(){
+
+        console.log("whats going onongfangoahg");
+
+
+        //get score from cookie
+        var playerScore = getCookie("playerScore");
+
+        //Updating score
+        firestore.collection("TestRoom").doc(p).update({
+            score: "10"
+        }).then(function() {
+            score.innerText = "Score = 00000";
+            console.log("score changed to: ");
+        }).catch(function(error) {
+            console.error("Error adding doc");
+        });
+
+    });
+
+
+}
 
 
 //HIDING AND SHOWING THINGS IN JS

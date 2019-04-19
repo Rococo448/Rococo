@@ -15,6 +15,8 @@
         <h1 id = "roomNumberShown">ROOM #:</h1>
         <input type= "textfield" placeholder= "enter room # here" id = "roomID" />
 
+        <h1 id = "score">Score=</h1>
+
         <button id = "joinRoom">Join Room! </button>
 
         <h4 id = "questionOutput">Welcome to Rococo!!</h4>
@@ -22,15 +24,31 @@
 
         <button id = "submitResponse">Submit Response! </button>
 
+
+        <button id = "questionOption1">Option 1</button>
+        <button id = "questionOption2">Option 2</button>
+        <button id = "questionOption3">Option 3</button>
+
+
         <script>
             function setupQuestion(){
                 var q = document.getElementById("questionOutput");
                 var r = document.getElementById("response");
                 var sr = document.getElementById("submitResponse");
+                var s = document.getElementById("score");
+
+                var qo1 = document.getElementById("questionOption1");
+                var qo2 = document.getElementById("questionOption2");
+                var qo3 = document.getElementById("questionOption3");
 
                 q.style.display = "none";
                 r.style.display = "none";
                 sr.style.display = "none";
+                s.style.display = "none";
+
+                qo1.style.display = "none";
+                qo2.style.display = "none";
+                qo3.style.display = "none";
 
                 console.log("im getting in");
                 }
