@@ -1,6 +1,20 @@
+/Initializing Firebase
+  var config = {
+    apiKey: "AIzaSyBYFOuocBhI3ZMa34HTQQ3OG5iDfItdSS4",
+    authDomain: "mywebapp-7bc86.firebaseapp.com",
+    databaseURL: "https://mywebapp-7bc86.firebaseio.com",
+    projectId: "mywebapp-7bc86",
+    storageBucket: "mywebapp-7bc86.appspot.com",
+    messagingSenderId: "858961654254"
+  };
+  firebase.initializeApp(config);
+
+var firestore = firebase.firestore();
+
 
 
 //Setting a document Reference
+
 
 
 ////Creating a randomly numbered document for a player
@@ -25,6 +39,31 @@ saveButton.addEventListener("click", function() {
     })
 })
 
+// To update age and favorite color:
+//db.collection("users").doc("frank").update({
+//    "age": 13,
+//    "favorites.color": "Red"
+//})
+//.then(function() {
+//    console.log("Document successfully updated!");
+//});
+
+// Add a new document with a generated id.
+//db.collection("cities").add({
+//    name: "Tokyo",
+//    country: "Japan"
+//})
+//.then(function(docRef) {
+//    console.log("Document written with ID: ", docRef.id);
+//})
+//.catch(function(error) {
+//    console.error("Error adding document: ", error);
+//});
+
+//Getting collection inside of a doc
+//collection("").doc().collection("")
+
+
 getRealtimeUpdates = function(){
     docRef.onSnapshot(function (doc){
         if(doc && doc.exists){
@@ -36,3 +75,4 @@ getRealtimeUpdates = function(){
 }
 
 getRealtimeUpdates();
+

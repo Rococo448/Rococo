@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rococo</title>
+
+        <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+
+    </head>
+
+    <body>
+
+        <h1 id = "nicknameOutput">PLAYER NAME:</h1>
+        <input type="textfield" placeholder="enter nickname here " id = "playerName"/>
+
+        <h1 id = "roomNumberShown">ROOM #:</h1>
+        <input type= "textfield" placeholder= "enter room # here" id = "roomID" />
+
+        <button id = "joinRoom">Join Room! </button>
+
+        <h4 id = "questionOutput">Welcome to Rococo!!</h4>
+        <input type= "textfield" placeholder= "enter response here" id = "response" />
+
+        <button id = "submitResponse">Submit Response! </button>
+
+        <script>
+            function setupQuestion(){
+                var q = document.getElementById("questionOutput");
+                var r = document.getElementById("response");
+                var sr = document.getElementById("submitResponse");
+
+                q.style.display = "none";
+                r.style.display = "none";
+                sr.style.display = "none";
+
+                console.log("im getting in");
+                }
+        </script>
+
+        <body onload="setupQuestion();"></body>
+
+
+        <script src= "./Rococo.js"></script>
+
+    </body>
+</html>

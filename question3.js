@@ -91,17 +91,24 @@ if(submitRs){
             truth2: truth2ToSave,
             lie: lieToSave
         }).then(function(){
+
+       window.location.href = "question4.html";
     console.log("status saved!");
 }).catch(function(error){
     console.log("got an error",error);
 })
 
-        window.location.href = "question4.html";
+       //window.location.href = "question4.html";
 
 
     });
 }
 
+
+guess.addEventListener("click", function(){
+
+       window.location.href = "question4.html";
+});
 
 
 

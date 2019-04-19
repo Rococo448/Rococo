@@ -10,11 +10,14 @@
 
 var firestore = firebase.firestore();
 
+docRefR = firestore.collection("Rooms").doc("10").collection("Players").doc();
+
 //MESSING AROUND
-var docRefR = firestore.collection("Rooms").doc("1");
 
 
 docRefR.get().then(function(doc){
+
+    console.log("before we check");
     if(doc.exists){
         const classRooms = doc.data();
         console.log("the doc data = ", classRooms.roomNumber);
@@ -27,14 +30,26 @@ docRefR.get().then(function(doc){
     console.log("error", error);
 });
 
+//var user;
+//userRef.on('value'), function(snap){
+//user = snap.val()
+//});
 
-var docRefP = firestore.collection("players").doc("1");
+//
+//db.collection("users").doc("frank").update({
+//    "age": 13,
+//    "favorites.color": "Red"
+//})
+//.then(function() {
+//    console.log("Document successfully updated!");
+//});
 
-docRefP.get().then(function(doc){
+
+docRefR.get().then(function(doc){
     if(doc.exists){
-        const playerList = doc.data();
-        console.log("the doc data = ", playerList.nickName);
-        latestNickname.innerText = "Player = " + playerList.nickName;
+        const playerData = doc.data();
+        console.log("the doc data = ", playerData.playerName);
+        latestNickname.innerText = "Player = " + playerData.playerName;
 
     }else{
         console.log("no such");

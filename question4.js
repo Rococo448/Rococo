@@ -71,6 +71,27 @@ docRefP.get().then(function(doc){
 //GETTING THE QUESTION OPTIONS
 
 
+docRefTTL = firestore.collection("responses").doc("3");
+
+docRefTTL.get().then(function(doc){
+    if(doc.exists){
+        const truthLie = doc.data();
+        console.log("the truths are " + truthLie.truth1 + " " + truthLie.truth2 + "and the lie is " + truthLie.lie);
+        truth1.innerText = truthLie.truth1;
+        truth2.innerText = truthLie.truth2;
+        lie.innerText = truthLie.lie;
+    }else{
+        console.log("no such");
+    }
+}).catch(function(error){
+    console.log("error", error);
+});
+
+
+lie.addEventListener("click", function(){
+
+       questionGenerator.innerText = "CORRECT";
+});
 
 
 
