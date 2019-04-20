@@ -32,25 +32,25 @@
 
         <script>
             function setupQuestion(){
+                //getting stuff from html body
                 var q = document.getElementById("questionOutput");
                 var r = document.getElementById("response");
                 var sr = document.getElementById("submitResponse");
                 var s = document.getElementById("score");
-
                 var qo1 = document.getElementById("questionOption1");
                 var qo2 = document.getElementById("questionOption2");
                 var qo3 = document.getElementById("questionOption3");
 
+                //hiding it all to start with
                 q.style.display = "none";
+                s.style.display = "none";
                 r.style.display = "none";
                 sr.style.display = "none";
-                s.style.display = "none";
-
                 qo1.style.display = "none";
                 qo2.style.display = "none";
                 qo3.style.display = "none";
 
-                console.log("im getting in");
+                //console.log("im getting in");
                 }
         </script>
 
