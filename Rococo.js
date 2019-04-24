@@ -30,6 +30,9 @@ const joinRoomButton = document.getElementById("joinRoom");
 //Response Text Field
 const response = document.getElementById("response");
 
+//Player Score Number
+const score = document.getElementById("score");
+
 //=========================BUTTON CLICKS===================//
 //JOIN ROOM BUTTON CLICK
 //First - save the room# input and playerName input to firestore
@@ -45,7 +48,7 @@ joinRoom.addEventListener("click", function(){
     docRef1.doc(playerToSave).set({
         playerName: playerToSave,
         roomNumber: roomToSave,
-        score: "0"
+        score: 0.0
     }).then(function(){
         //SAVE THE COOKIE!!!
         //create a cookie
@@ -54,26 +57,47 @@ joinRoom.addEventListener("click", function(){
 
 
         console.log("Document written with Room ID: ", docRef1.id);
-        playerNameShown.innerHTML = playerToSave;
-        roomNumberShown.innerHTML = roomToSave;
+        playerNameShown.innerHTML = "Name: " + playerToSave;
+        roomNumberShown.innerHTML = "Room #:" + roomToSave;
 
         //need to change the way the page looks!
         playerNameShown.style.fontSize = "12px";
+
+        //hiding playername entry
         playerName.style.display = "none";
 
         roomNumberShown.style.fontSize = "12px";
+        //hiding room entry
         roomID.style.display = "none";
+
+        //adding scoreboard
+        score.style.fontSize = "12px";
+        score.style.display = "block";
+        score.innerText = "Score: 0";
 
         joinRoomButton.style.display = "none";
 
+        var q = document.getElementById("questionOutput");
+        q.style.display = "block";
+
+//        var r = document.getElementById("response");
+//        var sr = document.getElementById("submitResponse");
+//        r.style.display = "block";
+//        sr.style.display = "block";
+
         //getResponseQuestion("1");
         //getSpecialQuestion();
-        getMCQuestion();
+        //getMCQuestion();
 
 
     }).catch(function(error){
         console.error("Got an error: ", error);
-    })
+    });
+    console.log("call responseq");
+
+    //getResponseQuestion("1");
+    //getSpecialQuestion();
+    getMCQuestion();
 })
 
 //SUBMIT RESPONSE BUTTON CLICK
@@ -123,7 +147,6 @@ function doSomething(){
     sr.style.display = "none";
 }
 
-
 //GETTING A COOKIE
 function getCookie(cname) {
   var name = cname + "=";
@@ -143,8 +166,9 @@ function getCookie(cname) {
 
 //GETTING A RESPONSE QUESTION
 function getResponseQuestion(n){
-    var q = document.getElementById("questionOutput");
-    q.style.display = "block";
+//    var q = document.getElementById("questionOutput");
+//    q.style.display = "block";
+
     var r = document.getElementById("response");
     var sr = document.getElementById("submitResponse");
     r.style.display = "block";
@@ -194,6 +218,9 @@ function getResponseQuestion(n){
     //            console.log("error", error);
     //        });
     //    }
+
+//    r.style.display = "none";
+//    sr.style.display = "none";
 }
 
 //GETTING A SPECIAL QUESTION
@@ -221,14 +248,36 @@ function getSpecialQuestion(){
 
 }
 
+
+//GETTING PLAYER SCORE
+function getPlayerScore(){
+
+    const p = getCookie("playerName");
+    firestore.collection("Room1").doc(p).get().then(function(doc){
+            if(doc.exists){
+                const playerData = doc.data();
+                const playerScoreToGet = playerData.score;
+                console.log("the players score = " + playerScoreToGet);
+                //Save score in a cookie
+
+                document.cookie = "score" + "=" + playerScoreToGet + ";";
+                //score.innerText = "Score = " + playerScoreToGet
+                return Number(playerScoreToGet);
+            }else{
+                console.log("no such");
+                return 100;
+            }
+        }).catch(function(error){
+            console.log("error", error);
+        })
+
+}
 //GETTING A MC QUESTION
 function getMCQuestion(n){
-    var q = document.getElementById("questionOutput");
-    q.style.display = "block";
-    var r = document.getElementById("response");
-    var sr = document.getElementById("submitResponse");
-    r.style.display = "none";
-    sr.style.display = "none";
+//    var r = document.getElementById("response");
+//    var sr = document.getElementById("submitResponse");
+//    r.style.display = "none";
+//    sr.style.display = "none";
 
     //Activate question option buttons and score
     var qO1 = document.getElementById("questionOption1");
@@ -246,28 +295,28 @@ function getMCQuestion(n){
     var p = getCookie("playerName");
 
     //Getting current score
-        firestore.collection("TestRoom").doc(p).get().then(function(doc){
-            if(doc.exists){
-                const playerData = doc.data();
-                const playerScoreToGet = playerData.score;
-                //Save score in a cookie
+//        firestore.collection("TestRoom").doc(p).get().then(function(doc){
+//            if(doc.exists){
+//                const playerData = doc.data();
+//                const playerScoreToGet = playerData.score;
+//
+//                console.log("the players score = " + playerScoreToGet);
+//                //Save score in a cookie
+//
+//                document.cookie = "score" + "=" + playerScoreToGet + ";";
+//                score.innerText = "Score = " + playerScoreToGet;
+//            }else{
+//                console.log("no such");
+//            }
+//        }).catch(function(error){
+//            console.log("error", error);
+//        });
 
-                document.cookie = "score" + "=" + playerScoreToGet + ";"
 
-                console.log("the players score = " +playerData.score);
-                score.innerText = "Score = " + playerScoreToGet;
-            }else{
-                console.log("no such");
-            }
-        }).catch(function(error){
-            console.log("error", error);
-        });
+    //Getting random Multiple choice question
 
-
-    //Getting random Multiply choic question
-
-    var randN = Math.floor(Math.random() * 10);
-    const docRefQ = firestore.collection("questions").doc("mcg5");
+    var randN = "mcq" + (Math.floor(Math.random() * 10)).toString();
+    const docRefQ = firestore.collection("questions").doc(randN);
 
 
     docRefQ.get().then(function(doc){
@@ -288,69 +337,77 @@ function getMCQuestion(n){
         });
 
     //Changing player score
-        var p = getCookie("playerName");
+        //var p = getCookie("playerName");
 
         //CORRECT RESPONSE
     questionOption1.addEventListener("click", function(){
 
-        console.log("whats going onongfangoahg");
-
-
+        //console.log("whats going onongfangoahg");
+        getPlayerScore();
         //get score from cookie
-        var playerScore = getCookie("playerScore");
+        //var playerScore = getCookie("playerScore");
+
+        //const pscore = getPlayerScore();
+        var oldScore = Number(getCookie("score"));
+        console.log("the current player score = " + oldScore.toString());
+
+        //var newScore = Number(getPlayerScore()) + 10;
+
+        var newScore = Number(getCookie("score")) + 10;
+
+        console.log("the new player score = " + newScore.toString());
 
         //Updating score
-        firestore.collection("TestRoom").doc(p).update({
-            score: "20"
+        firestore.collection("Room1").doc(p.toString()).update({
+            score: newScore
         }).then(function() {
-            score.innerText = "Score = 200";
+            score.innerText = newScore;
+            document.cookie = "score" + "=" + newScore + ";";
             console.log("score changed to: ");
         }).catch(function(error) {
             console.error("Error adding doc");
         });
+
+
+
+        getMCQuestion();
 
     });
 
+        // These two assignments are equivalent:
+
+//// Old-school:
+//var a2 = a.map(function(s){ return s.length });
+//
+//// ECMAscript 6 using arrow functions
+//var a3 = a.map( s => s.length );
+//
+//// both a2 and a3 will be equal to [31, 30, 31, 31]
+
     questionOption2.addEventListener("click", function(){
 
-        console.log("whats going onongfangoahg");
-
-
-        //get score from cookie
-        var playerScore = getCookie("playerScore");
-
-        //Updating score
-        firestore.collection("TestRoom").doc(p).update({
-            score: "10"
-        }).then(function() {
-            score.innerText = "Score = 00000";
-            console.log("score changed to: ");
-        }).catch(function(error) {
-            console.error("Error adding doc");
-        });
+        firestore.collection("Room1").get().then(res => {
+            console.log(res.size);
+            if(res.size ==  "9"){
+            getMCQuestion();
+            }
+            });
 
     });
 
     questionOption3.addEventListener("click", function(){
 
-        console.log("whats going onongfangoahg");
 
-
-        //get score from cookie
-        var playerScore = getCookie("playerScore");
-
-        //Updating score
-        firestore.collection("TestRoom").doc(p).update({
-            score: "10"
-        }).then(function() {
-            score.innerText = "Score = 00000";
-            console.log("score changed to: ");
-        }).catch(function(error) {
-            console.error("Error adding doc");
-        });
+        getMCQuestion();
 
     });
 
+    //console.log("HELLO");
+//setTimeout(function(){
+//    console.log("THIS IS");
+//}, 2000);
+//console.log("DOG");
+    //setTimeout(donothing,500);
 
 }
 
