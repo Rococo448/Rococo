@@ -393,6 +393,8 @@ function getMCQuestion(n){
             }
             });
 
+        getMCQuestion();
+
     });
 
     questionOption3.addEventListener("click", function(){
