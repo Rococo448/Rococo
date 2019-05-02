@@ -15,6 +15,9 @@ var firestore = firebase.firestore();
 //Reference to Room
 const docRef1 = firestore.collection("Room1");
 
+//Reference to Page Number
+const docRefR = firestore.collection("PageNumber").doc("CurrentPage");
+
 //==========================HTMLTEXTS/BUTTONS=================//
 //Output room# and Input room#
 const roomNumberShown = document.querySelector("#roomNumberShown");
@@ -32,6 +35,11 @@ const response = document.getElementById("response");
 
 //Player Score Number
 const score = document.getElementById("score");
+
+
+// VARIABLE CURRENT PAGE = 0, then after they enter
+
+
 
 //=========================BUTTON CLICKS===================//
 //JOIN ROOM BUTTON CLICK
@@ -80,6 +88,25 @@ joinRoom.addEventListener("click", function(){
         var q = document.getElementById("questionOutput");
         q.style.display = "block";
 
+
+         //CHANGING PAGE NUMBER IF LAST PLAYER Joins
+            firestore.collection("Room1").get().then(res => {
+            console.log(res.size);
+            if(res.size ==  "5"){
+                 docRefR.set({
+                        pageNumber: 1
+                    }).catch(function(error){
+                        console.error("got an error", error);
+                    });
+            }else{
+                console.log("room size = " + res.size);
+            }
+            });
+
+
+
+
+
 //        var r = document.getElementById("response");
 //        var sr = document.getElementById("submitResponse");
 //        r.style.display = "block";
@@ -93,46 +120,17 @@ joinRoom.addEventListener("click", function(){
     }).catch(function(error){
         console.error("Got an error: ", error);
     });
-    console.log("call responseq");
 
-    //getResponseQuestion("1");
+    // CALLING FOR GAMES/QUESTIONS HERE
+
+
+//    console.log("call response question");
+//    getResponseQuestion();
+
     //getSpecialQuestion();
-    console.log("before initial mc question call");
-    getMCQuestion();
-
-})
-
-//SUBMIT RESPONSE BUTTON CLICK
-// saves the question output and response in the
-// questions response collection which containes multiple
-// players responses by getting cookies
-//
-submitResponse.addEventListener("click", function(){
-    const questionToSave = questionOutput.value;
-    const responseToSave = response.value;
-
-    console.log("current question = " + questionToSave);
-
-    //Get Random Number WITH COOKIE
-    var p = getCookie("playerName");
-    var r = getCookie("randomNumber");
-    var q = getCookie("question");
-
-    console.log("p = " + p + " r = " + r);
-
-    const docRefQ = firestore.collection("questions").doc(r).collection("responses").doc(p);
-    console.log("I am going to save " + p + "'s response to Firestore in this question: " + q + "'s player responses");
-
-    docRefQ.set({
-        response: responseToSave
-        }).catch(function(error){
-        console.error("Got an error: ", error);
-    });
 
 
-
-    getResponseQuestion("1");
-    //getSpecialQuestion();
+    //console.log("before initial mc question call");
     //getMCQuestion();
 
 })
@@ -149,25 +147,9 @@ function doSomething(){
     sr.style.display = "none";
 }
 
-//GETTING A COOKIE
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
 
 //GETTING A RESPONSE QUESTION
-function getResponseQuestion(n){
+function getResponseQuestion(){
 //    var q = document.getElementById("questionOutput");
 //    q.style.display = "block";
 
@@ -177,15 +159,18 @@ function getResponseQuestion(n){
     sr.style.display = "block";
 
     //Get Random Number
-    var randN = Math.floor(Math.random() * 10);
+    //var randN = Math.floor(Math.random() * 10);
+
+    //Not random number
+    var randN = 6;
     const docRefQ = firestore.collection("questions").doc(randN.toString());
     //Save Random Number WITH COOKIE
     document.cookie = "randomNumber" + "=" + randN + ";"
     console.log("after setting randomNumber to " + randN);
 
 
-    if(n == 1){
-        console.log("made it in");
+    //if(n == 1){
+        //console.log("made it in");
         //const docRefQ = firestore.collection("questions").doc("1");
         //Math.floor(Math.random() * 10);
 //        var randN = Math.floor(Math.random() * 10);
@@ -203,8 +188,8 @@ function getResponseQuestion(n){
         }).catch(function(error){
             console.log("error", error);
         });
-    }
-    //    else if(n == 2){
+
+       //    else if(n == 2){
     ////        const randN = (Math.floor(Math.random() * 10)).toString();
     ////        const docRefQ = firestore.collection("questions").doc(randN);
     //
@@ -223,7 +208,71 @@ function getResponseQuestion(n){
 
 //    r.style.display = "none";
 //    sr.style.display = "none";
-}
+//}
+    }
+
+
+//SUBMIT RESPONSE BUTTON CLICK
+// saves the question output and response in the
+// questions response collection which containes multiple
+// players responses by getting cookies
+//
+submitResponse.addEventListener("click", function(){
+    const questionToSave = questionOutput.value;
+    const responseToSave = response.value;
+
+
+    var rsp = document.getElementById("response");
+    var srb = document.getElementById("submitResponse");
+
+    console.log("current question = " + questionToSave);
+
+    //Get Random Number WITH COOKIE
+    var p = getCookie("playerName");
+    var r = getCookie("randomNumber");
+    var q = getCookie("question");
+
+    console.log("p = " + p + " r = " + r);
+
+    const docRefQ = firestore.collection("questions").doc(r).collection("responses").doc(p);
+    console.log("I am going to save " + p + "'s response to Firestore in this question: " + q + "'s player responses");
+
+    docRefQ.set({
+        response: responseToSave,
+        playerName: p,
+        roomNumber: "1"
+        }).catch(function(error){
+        console.error("Got an error: ", error);
+    });
+
+
+    //CHANGING PAGE NUMBER ONCE LAST PLAYER ANSWERS
+      firestore.collection("questions").doc("6").collection("responses").get().then(res => {
+            console.log(res.size);
+            if(res.size ==  "5"){
+                 docRefR.set({
+                        pageNumber: 2
+                    }).catch(function(error){
+                        console.error("got an error", error);
+                    });
+            }else{
+                console.log("room size = " + res.size);
+            }
+            });
+
+
+    rsp.style.display = "none";
+    srb.style.display = "none";
+
+questionOutput.innerText = "waiting for others to answer";
+
+
+    //getResponseQuestion("1");
+    //getSpecialQuestion();
+    //getMCQuestion();
+
+})
+
 
 //GETTING A SPECIAL QUESTION
 function getSpecialQuestion(){
@@ -249,6 +298,38 @@ function getSpecialQuestion(){
 
 
 }
+//ASKING EVERYONE WHOSE DOING WHAT THIS WEEKEND
+//Whose ____ this weekend
+//X,Y,Z
+function getGeneratedQuestion(){
+
+     var q = document.getElementById("questionOutput");
+    //q.style.display = "block";
+    q.innerText = "Generated Question Question";
+    var p = getCookie("playerName");
+
+    console.log("getting question");
+    firestore.collection("questions").doc("6").collection("responses").where("roomNumber", "==", "1").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            const qRs = doc.data();
+            q.innerText = "who is doing " +  qRs.response + " this weekend?";
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+    console.log("after getting question");
+
+
+    //Add Buttons of player options!!!
+
+
+
+
+}
 
 
 //GETTING PLAYER SCORE
@@ -259,7 +340,7 @@ function getPlayerScore(){
             if(doc.exists){
                 const playerData = doc.data();
                 const playerScoreToGet = playerData.score;
-                console.log("the players score = ");
+                console.log("the players score ===== ");
                 //Save score in a cookie
 
                 document.cookie = "score" + "=" + playerScoreToGet + ";";
@@ -439,4 +520,56 @@ function getMCQuestion(n){
     //setTimeout(donothing,500);
 
 }
+//GETTING A COOKIE
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+//THERE NEEDS TO BE A GET MCQUESTIONBUTTONRESPONSEMETHOD
+
+
+
+// ======================= TESTING =========================== //
+
+
+getRealtimeUpdates = function () {
+    docRefR.onSnapshot( function(doc){
+        updateScreen(doc);
+    });
+}
+
+function updateScreen(doc){
+    //console.log("here35");
+    if(doc && doc.exists){
+        const myData = doc.data();
+        //console.log("here2");
+
+
+
+        if(myData.pageNumber == 1){
+            console.log("here");
+            getResponseQuestion();
+        }
+        else if(myData.pageNumber == 2){
+            //getSpecialQuestion();
+            console.log("waiting for page 2");
+            getGeneratedQuestion();
+                }
+    }
+}
+//console.log("heregha");
+getRealtimeUpdates();
+
 
