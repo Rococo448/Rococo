@@ -27,6 +27,7 @@ const roomID = document.querySelector("#roomID");
 const playerNameShown = document.querySelector("#nicknameOutput");
 const playerName = document.querySelector("#playerName");
 
+
 //Join Room Button
 const joinRoomButton = document.getElementById("joinRoom");
 
@@ -35,6 +36,8 @@ const response = document.getElementById("response");
 
 //Player Score Number
 const score = document.getElementById("score");
+
+
 
 
 // VARIABLE CURRENT PAGE = 0, then after they enter
@@ -55,7 +58,8 @@ joinRoom.addEventListener("click", function(){
     console.log("I am going to save " + roomToSave + " and " + playerToSave + " to Firestore");
     docRef1.doc(playerToSave).set({
         playerName: playerToSave,
-        roomNumber: roomToSave,
+        playerNumber: roomToSave,
+        roomNumber: "1",
         score: 0.0
     }).then(function(){
         //SAVE THE COOKIE!!!
@@ -63,10 +67,11 @@ joinRoom.addEventListener("click", function(){
         //document.cookie = playerToSave;
         document.cookie = "playerName" + "=" + playerToSave + ";"
 
+        document.cookie = "playerNumber" + "=" + roomToSave + ";"
 
         console.log("Document written with Room ID: ", docRef1.id);
         playerNameShown.innerHTML = "Name: " + playerToSave;
-        roomNumberShown.innerHTML = "Room #:" + roomToSave;
+        roomNumberShown.innerHTML = "Room #: 1";
 
         //need to change the way the page looks!
         playerNameShown.style.fontSize = "12px";
@@ -162,11 +167,13 @@ function getResponseQuestion(){
     //var randN = Math.floor(Math.random() * 10);
 
     //Not random number
-    var randN = 6;
-    const docRefQ = firestore.collection("questions").doc(randN.toString());
+    //var randN = 6;
+
+
+    const docRefQ = firestore.collection("questions").doc("FirstQuestion");
     //Save Random Number WITH COOKIE
-    document.cookie = "randomNumber" + "=" + randN + ";"
-    console.log("after setting randomNumber to " + randN);
+    //document.cookie = "randomNumber" + "=" + randN + ";"
+    //console.log("after setting randomNumber to " + randN);
 
 
     //if(n == 1){
@@ -229,25 +236,45 @@ submitResponse.addEventListener("click", function(){
 
     //Get Random Number WITH COOKIE
     var p = getCookie("playerName");
-    var r = getCookie("randomNumber");
+    //var r = getCookie("randomNumber");
+    var pNum = getCookie("playerNumber");
     var q = getCookie("question");
 
-    console.log("p = " + p + " r = " + r);
+    //console.log("p = " + p + " r = " + r);
 
-    const docRefQ = firestore.collection("questions").doc(r).collection("responses").doc(p);
+    const docRefQ = firestore.collection("questions").doc("FirstQuestion").collection("responses").doc(p);
     console.log("I am going to save " + p + "'s response to Firestore in this question: " + q + "'s player responses");
+
+    //get playerNumber
+//    firestore.collection("questions").doc("FirstQuestion").collection("responses").doc(p).get().then(function(doc){
+//            if(doc.exists){
+//                const playerData = doc.data();
+//                const playerNumber = playerData.score;
+//
+//                console.log("the players score = " + playerScoreToGet);
+//                //Save score in a cookie
+//
+//                document.cookie = "score" + "=" + playerScoreToGet + ";";
+//                score.innerText = "Score = " + playerScoreToGet;
+//            }else{
+//                console.log("no such");
+//            }
+//        }).catch(function(error){
+//            console.log("error", error);
+//        });
 
     docRefQ.set({
         response: responseToSave,
         playerName: p,
+        playerNumber: pNum,
         roomNumber: "1"
         }).catch(function(error){
         console.error("Got an error: ", error);
     });
 
 
-    //CHANGING PAGE NUMBER ONCE LAST PLAYER ANSWERS
-      firestore.collection("questions").doc("6").collection("responses").get().then(res => {
+    //CHANGING PAGE NUMBER ONCE LAST PLAYER ANSWERS first Question
+    firestore.collection("questions").doc("FirstQuestion").collection("responses").get().then(res => {
             console.log(res.size);
             if(res.size ==  "5"){
                  docRefR.set({
@@ -259,7 +286,6 @@ submitResponse.addEventListener("click", function(){
                 console.log("room size = " + res.size);
             }
             });
-
 
     rsp.style.display = "none";
     srb.style.display = "none";
@@ -301,20 +327,24 @@ function getSpecialQuestion(){
 //ASKING EVERYONE WHOSE DOING WHAT THIS WEEKEND
 //Whose ____ this weekend
 //X,Y,Z
-function getGeneratedQuestion(){
+//function getGeneratedQuestion(){
+function getGeneratedQuestion(n){
 
      var q = document.getElementById("questionOutput");
     //q.style.display = "block";
     q.innerText = "Generated Question Question";
     var p = getCookie("playerName");
 
+
+    //Putting player (n)'s response into question
+
     console.log("getting question");
-    firestore.collection("questions").doc("6").collection("responses").where("roomNumber", "==", "1").get().then(function(querySnapshot) {
+    firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", n).get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             console.log(doc.id, " => ", doc.data());
             const qRs = doc.data();
-            q.innerText = "who is doing " +  qRs.response + " this weekend?";
+            q.innerText = "Who is " +  qRs.response + " this weekend??";
         });
     })
     .catch(function(error) {
@@ -327,7 +357,111 @@ function getGeneratedQuestion(){
     //Add Buttons of player options!!!
 
 
+    //Activate question option buttons
+    var qO1 = document.getElementById("questionOption1");
+    qO1.style.display = "block";
+    var qO2 = document.getElementById("questionOption2");
+    qO2.style.display = "block";
+    var qO3 = document.getElementById("questionOption3");
+    qO3.style.display = "block";
+    var qO4 = document.getElementById("questionOption4");
+    qO4.style.display = "block";
+    var qO5 = document.getElementById("questionOption5");
+    qO5.style.display = "block";
 
+     firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", "1").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log("doc data =  ", doc.data());
+            const pNs = doc.data();
+            qO1.innerText = pNs.playerName;
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+    firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", "2").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log("doc data =  ", doc.data());
+            const pNs = doc.data();
+            qO2.innerText = pNs.playerName;
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+    firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", "3").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log("doc data =  ", doc.data());
+            const pNs = doc.data();
+            qO3.innerText = pNs.playerName;
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+     firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", "4").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log("doc data =  ", doc.data());
+            const pNs = doc.data();
+            qO4.innerText = pNs.playerName;
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+    firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", "5").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log("doc data =  ", doc.data());
+            const pNs = doc.data();
+            qO5.innerText = pNs.playerName;
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+//Checking Generated Question Button Clicks
+
+    questionOption1.addEventListener("click", function(){
+
+        console.log("clicked option 1");
+
+    });
+
+    questionOption2.addEventListener("click", function(){
+
+        console.log("clicked option 2");
+
+    });
+
+    questionOption3.addEventListener("click", function(){
+
+        console.log("clicked option 3");
+
+    });
+
+
+     questionOption4.addEventListener("click", function(){
+
+         console.log("clicked option 4");
+
+
+    });
+
+     questionOption5.addEventListener("click", function(){
+
+         console.log("clicked option 5");
+
+     });
 
 }
 
@@ -556,17 +690,28 @@ function updateScreen(doc){
         const myData = doc.data();
         //console.log("here2");
 
-
-
         if(myData.pageNumber == 1){
-            console.log("here");
+            console.log("page 1");
             getResponseQuestion();
         }
         else if(myData.pageNumber == 2){
             //getSpecialQuestion();
-            console.log("waiting for page 2");
-            getGeneratedQuestion();
-                }
+            console.log("page 2");
+            var playerNumber = Number(getCookie("playerNumber"));
+            getGeneratedQuestion(playerNumber);
+        }
+        else if(myData.pageNumber == 3){
+            console.log("page 3");
+
+        }
+        else if(myData.pageNumber == 4){
+            console.log("page 4");
+
+        }
+        else if(myData.pageNumber == 5){
+            console.log("last page");
+
+        }
     }
 }
 //console.log("heregha");
