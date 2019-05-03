@@ -339,7 +339,7 @@ function getGeneratedQuestion(n){
     //Putting player (n)'s response into question
 
     console.log("getting question");
-    firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", n).get().then(function(querySnapshot) {
+    firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", "1").get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             console.log(doc.id, " => ", doc.data());
@@ -369,6 +369,8 @@ function getGeneratedQuestion(n){
     var qO5 = document.getElementById("questionOption5");
     qO5.style.display = "block";
 
+
+    console.log("player number = ");
      firestore.collection("questions").doc("FirstQuestion").collection("responses").where("playerNumber", "==", "1").get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
@@ -434,6 +436,7 @@ function getGeneratedQuestion(n){
     questionOption1.addEventListener("click", function(){
 
         console.log("clicked option 1");
+        q.innerText = "You're right!";
 
     });
 
@@ -441,11 +444,15 @@ function getGeneratedQuestion(n){
 
         console.log("clicked option 2");
 
+        q.innerText = "Nope!";
+
     });
 
     questionOption3.addEventListener("click", function(){
 
         console.log("clicked option 3");
+
+        q.innerText = "Nope!";
 
     });
 
@@ -454,12 +461,16 @@ function getGeneratedQuestion(n){
 
          console.log("clicked option 4");
 
+        q.innerText = "Nope!";
+
 
     });
 
      questionOption5.addEventListener("click", function(){
 
          console.log("clicked option 5");
+
+        q.innerText = "Nope!";
 
      });
 
@@ -697,8 +708,8 @@ function updateScreen(doc){
         else if(myData.pageNumber == 2){
             //getSpecialQuestion();
             console.log("page 2");
-            var playerNumber = Number(getCookie("playerNumber"));
-            getGeneratedQuestion(playerNumber);
+            //var playerNumber = Number(getCookie("playerNumber"));
+            getGeneratedQuestion(4);
         }
         else if(myData.pageNumber == 3){
             console.log("page 3");
